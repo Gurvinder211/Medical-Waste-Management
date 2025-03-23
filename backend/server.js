@@ -17,32 +17,32 @@ const wss = new Server({ server }); // WebSocket Server
 app.use(cors());
 app.use(express.json());
 
-// Routes
-// app.use("/api/auth", authRoutes);
-// app.use("/api/waste", wasteRoutes);
-// app.use("/api/tracking", trackingRoutes);
+//Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/waste", wasteRoutes);
+app.use("/api/tracking", trackingRoutes);
 
-// // WebSocket Logic for Real-Time Truck Tracking
-// wss.on("connection", (ws) => {
-//     console.log("Client connected for tracking");
+// WebSocket Logic for Real-Time Truck Tracking
+wss.on("connection", (ws) => {
+    console.log("Client connected for tracking");
 
-//     ws.on("message", (message) => {
-//         const data = JSON.parse(message);
-//         if (data.action === "track_truck") {
-//             // Simulated truck movement
-//             let location = 0;
-//             const interval = setInterval(() => {
-//                 location += 10; // Simulating movement
-//                 ws.send(JSON.stringify({ location: `Latitude: 40.${location}, Longitude: -73.${location}` }));
-//             }, 3000);
+    ws.on("message", (message) => {
+        const data = JSON.parse(message);
+        if (data.action === "track_truck") {
+            let location = 0;
+            const interval = setInterval(() => {
+                location += 10;
+                ws.send(JSON.stringify({ location: `Lat: 40.${location}, Lon: -73.${location}` }));
+            }, 3000);
 
-//             ws.on("close", () => {
-//                 clearInterval(interval);
-//                 console.log("Client disconnected from tracking");
-//             });
-//         }
-//     });
-// });
+            ws.on("close", () => {
+                clearInterval(interval);
+                console.log("Client disconnected from tracking");
+            });
+        }
+    });
+});
+
 
 // Start Server
 const PORT = process.env.PORT || 5000;
