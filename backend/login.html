@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup - MedWaste</title>
+  <link rel="stylesheet" href="style/login.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <i class="ri-arrow-left-circle-fill"></i>
+  <!-- Signup Container -->
+  <div class="signup-container">
+    <div class="signup-header">
+      <h2>Create Your Account</h2>
+      <p>Join us to manage medical waste efficiently.</p>
+    </div>
+
+    <!-- Signup Form -->
+    <form id="signup-form">
+      <!-- User Selection -->
+      <div class="user-selection">
+        <label>
+          <input type="radio" name="user-type" value="hospital" checked>
+          <span>Hospital/Clinic</span>
+        </label>
+        <label>
+          <input type="radio" name="user-type" value="collector">
+          <span>Waste Collector</span>
+        </label>
+      </div>
+
+      <!-- Hospital/Clinic Form -->
+      <div id="hospital-form">
+        <div class="input-group">
+          <label for="hospital-name">Name</label>
+          <input type="text" id="hospital-name" placeholder="Enter hospital/clinic name" required>
+        </div>
+        <div class="input-group">
+          <label for="hospital-address">Address</label>
+          <input type="text" id="hospital-address" placeholder="Enter address" required>
+        </div>
+        <div class="input-group">
+          <label for="hospital-email">Email</label>
+          <input type="email" id="hospital-email" placeholder="Enter email" required>
+        </div>
+        <div class="input-group">
+          <label for="hospital-password">Password</label>
+          <input type="password" id="hospital-password" placeholder="Enter password" required>
+          <i class="fas fa-eye" id="toggle-hospital-password"></i>
+        </div>
+      </div>
+
+      <!-- Waste Collector Form -->
+      <div id="collector-form" style="display: none;">
+        <div class="input-group">
+          <label for="collector-name">Name</label>
+          <input type="text" id="collector-name" placeholder="Enter your name" required>
+        </div>
+        <div class="input-group">
+          <label for="company-name">Company Name</label>
+          <input type="text" id="company-name" placeholder="Enter company name" required>
+        </div>
+        <div class="input-group">
+          <label for="license-number">License Number</label>
+          <input type="text" id="license-number" placeholder="Enter license number" required>
+        </div>
+        <div class="input-group">
+          <label for="collector-email">Email</label>
+          <input type="email" id="collector-email" placeholder="Enter email" required>
+        </div>
+        <div class="input-group">
+          <label for="collector-password">Password</label>
+          <input type="password" id="collector-password" placeholder="Enter password" required>
+          <i class="fas fa-eye" id="toggle-collector-password"></i>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button  class="signup-button" type="submit">Signup</button>
+
+      <!-- Login Link -->
+      <div class="login-link">
+        <p>Already have an account? <a href="login.html">Login</a></p>
+      </div>
+    </form>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/dashboard.css">
+    <title>Dashboard</title>
+    
+</head>
+<body>
+  
+    <div class="dashboard">
+        <div class="sidebar">
+            <!-- <h2>Dashboard</h2> -->
+            <a href="#collector">Collector Dashboard</a>
+            <a href="#hospital">Hospital Dashboard</a>
+            <a href="#admin">Admin Panel</a>
+        </div>
+        <div class="main-content">
+            <section id="collector">
+                <h2>Collector Dashboard</h2>
+                <div class="card">
+                    <h3>Pending Waste Requests</h3>
+                    <p>Location: XYZ Hospital</p>
+                    <p>Waste Type: Infectious</p>
+                    <p>Quantity: 10kg</p>
+                    <button onclick="acceptRequest()">Accept Request</button>
+                    <div class="status">
+                        <button class="collected" onclick="updateStatus('Collected')">Collected</button>
+                        <button class="transit" onclick="updateStatus('In Transit')">In Transit</button>
+                        <button class="disposed" onclick="updateStatus('Disposed')">Disposed</button>
+                    </div>
+                </div>
+            </section>
+            <section id="hospital">
+                <h2>Hospital Dashboard</h2>
+                <div class="card">
+                    <h3>Reported Waste</h3>
+                    <p>Status: <span id="wasteStatus">Pending</span></p>
+                    <p>Live Tracking: Enabled</p>
+                    <p>Disposal Confirmation: Pending</p>
+                </div>
+            </section>
+            <section id="admin">
+                <h2>Admin Panel</h2>
+                <div class="card">
+                    <h3>Manage Users</h3>
+                    <p>Total Hospitals: 50</p>
+                    <p>Total Collectors: 20</p>
+                </div>
+                <div class="card">
+                    <h3>Analytics</h3>
+                    <p>Waste Collected: 2000kg</p>
+                    <p>Compliance Rate: 98%</p>
+                </div>
+            </section>
+        </div>
+    </div>
+    <script>
+        function acceptRequest() {
+            alert('Request Accepted');
+            document.getElementById('wasteStatus').innerText = 'Accepted';
+        }
+        function updateStatus(status) {
+            alert('Status updated to ' + status);
+            document.getElementById('wasteStatus').innerText = status;
+        }
+        document.getElementById('signupButton').addEventListener('click', function() {
+            window.location.href = 'signup.html'; // Change to the actual signup page URL
+        });
+    </script>
+</body>
+</html>
