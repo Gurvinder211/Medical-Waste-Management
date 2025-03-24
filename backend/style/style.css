@@ -43,7 +43,23 @@ body {
     z-index: 10;
 }
 
+.nav-logo{
+    height: 55px;
+    width: 55px;
+    border-radius: 2px;
+    background-color: #F7F9F9;
 
+}
+.logo{
+    background-image: url("m.png");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    height: 50px;
+    width: 50px;
+
+}
 .navbar {
     width: 100%;
     background-color: #00a67751;
