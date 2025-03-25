@@ -7,17 +7,26 @@ const router = express.Router();
 
 // Signup
 router.post("/signup", async (req, res) => {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, address, companyName, licenseNumber } = req.body;
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new User({ name, email, password: hashedPassword, role });
-        await user.save();
-        res.json({ message: "User Registered" });
+        const newUser = new User({
+            name,
+            email,
+            password: hashedPassword,
+            role,
+            ...(role === "provider" ? { address } : { companyName, licenseNumber }),
+        });
+
+        await newUser.save();
+        res.json({ message: "User Registered Successfully" });
     } catch (error) {
-        res.status(500).json({ error: "Error Registering User" });
+        res.status(500).json({ error: "Signup Failed" });
     }
 });
+
+module.exports = router;
 
 // Login
 router.post("/login", async (req, res) => {
