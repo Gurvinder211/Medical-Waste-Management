@@ -1,73 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/css/dashboard.css">
-    <title>Dashboard</title>
-    
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  <!-- Leaflet CSS for map integration -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <title>Dashboard</title>
+  <script href="../assets/js/dashboard.js"></script>
 </head>
 <body>
-  
-    <div class="dashboard">
-        <div class="sidebar">
-            <!-- <h2>Dashboard</h2> -->
-            <a href="#collector">Collector Dashboard</a>
-            <a href="#hospital">Hospital Dashboard</a>
-            <a href="#admin">Admin Panel</a>
-        </div>
-        <div class="main-content">
-            <section id="collector">
-                <h2>Collector Dashboard</h2>
-                <div class="card">
-                    <h3>Pending Waste Requests</h3>
-                    <p>Location: XYZ Hospital</p>
-                    <p>Waste Type: Infectious</p>
-                    <p>Quantity: 10kg</p>
-                    <button onclick="acceptRequest()">Accept Request</button>
-                    <div class="status">
-                        <button class="collected" onclick="updateStatus('Collected')">Collected</button>
-                        <button class="transit" onclick="updateStatus('In Transit')">In Transit</button>
-                        <button class="disposed" onclick="updateStatus('Disposed')">Disposed</button>
-                    </div>
-                </div>
-            </section>
-            <section id="hospital">
-                <h2>Hospital Dashboard</h2>
-                <div class="card">
-                    <h3>Reported Waste</h3>
-                    <p>Status: <span id="wasteStatus">Pending</span></p>
-                    <p>Live Tracking: Enabled</p>
-                    <p>Disposal Confirmation: Pending</p>
-                </div>
-            </section>
-            <section id="admin">
-                <h2>Admin Panel</h2>
-                <div class="card">
-                    <h3>Manage Users</h3>
-                    <p>Total Hospitals: 50</p>
-                    <p>Total Collectors: 20</p>
-                </div>
-                <div class="card">
-                    <h3>Analytics</h3>
-                    <p>Waste Collected: 2000kg</p>
-                    <p>Compliance Rate: 98%</p>
-                </div>
-            </section>
-        </div>
+  <div class="dashboard">
+    <div class="sidebar">
+      <!-- Sidebar Navigation -->
+      <a href="#collector">Collector Dashboard</a>
+      <a href="#hospital">Hospital Dashboard</a>
+      <a href="#admin">Admin Panel</a>
     </div>
-    <script>
-        function acceptRequest() {
-            alert('Request Accepted');
-            document.getElementById('wasteStatus').innerText = 'Accepted';
-        }
-        function updateStatus(status) {
-            alert('Status updated to ' + status);
-            document.getElementById('wasteStatus').innerText = status;
-        }
-        document.getElementById('signupButton').addEventListener('click', function() {
-            window.location.href = 'signup.html'; // Change to the actual signup page URL
+    <div class="main-content">
+      <!-- Collector Dashboard Section -->
+      <section id="collector">
+        <h2>Collector Dashboard</h2>
+        <div class="card" id="collectorCard">
+          <h3>Pending Waste Requests</h3>
+          <!-- Container for waste requests loaded dynamically -->
+          <div id="wasteRequests"></div>
+          <button onclick="acceptRequest()">Accept Request</button>
+          <div class="status">
+            <button class="collected" onclick="updateStatus('Collected')">Collected</button>
+            <button class="transit" onclick="updateStatus('In Transit')">In Transit</button>
+            <button class="disposed" onclick="updateStatus('Disposed')">Disposed</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Hospital Dashboard Section -->
+      <section id="hospital">
+        <h2>Hospital Dashboard</h2>
+        <div class="card">
+          <h3>Reported Waste</h3>
+          <p>Status: <span id="wasteStatus">Pending</span></p>
+          <p>Live Tracking: <span id="trackingStatus">Not Available</span></p>
+          <p>Disposal Confirmation: Pending</p>
+          <!-- Map container for live tracking -->
+          <div id="map" style="height: 300px;"></div>
+        </div>
+      </section>
+
+      <!-- Admin Panel Section -->
+      <section id="admin">
+        <h2>Admin Panel</h2>
+        <div class="card">
+          <h3>Manage Users</h3>
+          <p>Total Hospitals: <span id="totalHospitals">0</span></p>
+          <p>Total Collectors: <span id="totalCollectors">0</span></p>
+        </div>
+        <div class="card">
+          <h3>Analytics</h3>
+          <p>Waste Collected: <span id="wasteCollected">0kg</span></p>
+          <p>Compliance Rate: <span id="complianceRate">0%</span></p>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Include Leaflet JS for map functionality -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    /***** Map Setup using Leaflet *****/
+    // Initialize map centered on a default coordinate (e.g., New York City)
+    const map = L.map('map').setView([40.7128, -74.0060], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+    // Marker for the truck location (initially at default coordinates)
+    let truckMarker = L.marker([40.7128, -74.0060]).addTo(map)
+      .bindPopup("Truck Location");
+
+    // Update the marker on the map with new coordinates
+    function updateMap(lat, lon) {
+      truckMarker.setLatLng([lat, lon]);
+      map.setView([lat, lon], 12);
+    }
+
+    /***** Dashboard Functions *****/
+    // Simulate accepting a waste request (update status and trigger tracking)
+    function acceptRequest() {
+      alert('Request Accepted');
+      document.getElementById('wasteStatus').innerText = 'Accepted';
+      // Start updating live tracking after accepting a request
+      updateTrackingStatus();
+    }
+
+    // Update the displayed waste status
+    function updateStatus(status) {
+      alert('Status updated to ' + status);
+      document.getElementById('wasteStatus').innerText = status;
+    }
+
+    // Fetch pending waste requests for the collector dashboard
+    async function fetchWasteRequests() {
+      try {
+        const response = await fetch("http://localhost:5000/api/waste", {
+          headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
         });
-    </script>
+        const data = await response.json();
+        const wasteRequestsDiv = document.getElementById("wasteRequests");
+        wasteRequestsDiv.innerHTML = ""; // Clear previous entries
+
+        data.forEach(request => {
+          const div = document.createElement("div");
+          div.classList.add("waste-request");
+          div.innerHTML = `
+            <p>Location: ${request.location}</p>
+            <p>Type: ${request.type}</p>
+            <p>Quantity: ${request.weight}kg</p>
+          `;
+          wasteRequestsDiv.appendChild(div);
+        });
+      } catch (error) {
+        console.error("Error fetching waste requests:", error);
+      }
+    }
+
+    // Fetch live tracking data for the hospital dashboard
+    async function fetchLiveTracking() {
+      try {
+        // Replace '123456' with a dynamic waste/tracking ID as needed
+        const response = await fetch("http://localhost:5000/api/tracking/123456", {
+          headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
+        });
+        const data = await response.json();
+        if (data && data.lat && data.lon) {
+          document.getElementById("trackingStatus").innerText = data.status || "En Route";
+          updateMap(data.lat, data.lon);
+        }
+      } catch (error) {
+        console.error("Error fetching live tracking data:", error);
+      }
+    }
+
+    // Start periodic fetching of live tracking data after a request is accepted
+    function updateTrackingStatus() {
+      fetchLiveTracking(); // Initial fetch
+      setInterval(fetchLiveTracking, 5000); // Update every 5 seconds
+    }
+
+    // Fetch analytics data for the admin panel
+    async function fetchAdminAnalytics() {
+      try {
+        const response = await fetch("http://localhost:5000/api/admin/analytics", {
+          headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
+        });
+        const data = await response.json();
+        document.getElementById("totalHospitals").innerText = data.totalHospitals;
+        document.getElementById("totalCollectors").innerText = data.totalCollectors;
+        document.getElementById("wasteCollected").innerText = data.wasteCollected + "kg";
+        document.getElementById("complianceRate").innerText = data.complianceRate + "%";
+      } catch (error) {
+        console.error("Error fetching admin analytics:", error);
+      }
+    }
+
+    /***** On Page Load *****/
+    window.addEventListener("load", () => {
+      // Fetch dynamic data for each dashboard section
+      fetchWasteRequests();
+      fetchAdminAnalytics();
+      // Optionally, for hospitals, you might trigger live tracking automatically if a request is active:
+      // fetchLiveTracking();
+    });
+  </script>
 </body>
 </html>
