@@ -2,6 +2,7 @@ const express = require("express");
 const http = require("http");
 const cors = require("cors");
 const { Server } = require("ws");
+const path = require("path");
 require("dotenv").config();
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
@@ -16,11 +17,16 @@ const wss = new Server({ server }); // WebSocket Server
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "../frontend")));
 
 //Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/waste", wasteRoutes);
 app.use("/api/tracking", trackingRoutes);
+
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend", "pages", "index.html"));
+  });
 
 // WebSocket Logic for Real-Time Truck Tracking
 wss.on("connection", (ws) => {

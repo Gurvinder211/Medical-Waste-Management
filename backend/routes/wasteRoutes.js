@@ -22,5 +22,6 @@ router.get("/", authMiddleware, async (req, res) => {
     const waste = await Waste.find({ status: "pending" });
     res.json(waste);
 });
+  
 
 module.exports = router;
