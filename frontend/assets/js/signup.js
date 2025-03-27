@@ -3,6 +3,34 @@ document.addEventListener("DOMContentLoaded", () => {
   const collectorForm = document.getElementById("collector-form");
   const userTypeInputs = document.querySelectorAll('input[name="user-type"]');
 
+    // Function to disable all inputs in a container
+    function setDisabled(container, disabled) {
+      const inputs = container.querySelectorAll("input");
+      inputs.forEach(input => {
+        input.disabled = disabled;
+      });
+    }
+  
+    // Initialize - disable collector form inputs
+    setDisabled(collectorForm, true);
+    setDisabled(hospitalForm, false);
+
+    userTypeInputs.forEach(input => {
+      input.addEventListener("change", (e) => {
+        if (e.target.value === "hospital") {
+          hospitalForm.style.display = "block";
+          collectorForm.style.display = "none";
+          setDisabled(hospitalForm, false);
+          setDisabled(collectorForm, true);
+        } else {
+          hospitalForm.style.display = "none";
+          collectorForm.style.display = "block";
+          setDisabled(hospitalForm, true);
+          setDisabled(collectorForm, false);
+        }
+      });
+    });
+
   // Toggle forms based on user selection
   userTypeInputs.forEach(input => {
     input.addEventListener("change", (e) => {

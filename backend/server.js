@@ -8,6 +8,8 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const wasteRoutes = require("./routes/wasteRoutes");
 const trackingRoutes = require("./routes/trackingRoutes");
+const authMiddleware = require("./middleware/authMiddleware");
+
 
 // Initialize Express App
 const app = express();
@@ -26,6 +28,22 @@ app.use("/api/tracking", trackingRoutes);
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend", "pages", "index.html"));
+  });
+app.get("/login.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend", "pages", "login.html"));
+  });
+app.get("/signup.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend", "pages", "signup.html"));
+  });
+  app.get("/dashboard.html", authMiddleware, (req, res) => {
+    console.log("User Role:", req.user.role); // Debugging log
+  
+    // Allow only specific roles
+    if (req.user.role === "hospital" || req.user.role === "collector" || req.user.role === "admin") {
+      res.sendFile(path.join(__dirname, "../frontend/pages", "dashboard.html"));
+    } else {
+      return res.status(403).json({ message: "Access Denied" });
+    }
   });
 
 // WebSocket Logic for Real-Time Truck Tracking
