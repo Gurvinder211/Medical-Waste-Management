@@ -35,6 +35,9 @@ app.get("/login.html", (req, res) => {
 app.get("/signup.html", (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend", "pages", "signup.html"));
   });
+  app.get("/contact.html", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend", "pages", "contact.html"));
+  });
   app.get("/dashboard.html", authMiddleware, (req, res) => {
     console.log("User Role:", req.user.role); // Debugging log
   

@@ -18,7 +18,9 @@ async function checkAccess() {
     const response = await fetch("https://medical-waste-management.onrender.com/api/auth", {
       method: "GET",
       headers: { Authorization: "Bearer " + token,
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin" : "*", 
+      "Access-Control-Allow-Credentials" : true 
        }
   
     });
