@@ -24,6 +24,11 @@ body {
    
 }
 
+@media screen and (max-width:390px){
+    body{
+
+    }
+}
 #cursor {
     height: 15px;
     width: 15px;
@@ -74,6 +79,14 @@ body {
 
 }
 
+@media screen and (max-width:390px){
+    .navbar{
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+    }
+}
+
 .navbar a {
     color: #F7F9F9;
     font-weight: 700;
@@ -115,6 +128,17 @@ body {
 
 }
 
+@media screen and (max-width:390px){
+    .hero{
+       
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       flex-direction: column;
+    }
+    
+}
+
 .hero h1 {
     font-size: 3em;
     margin-bottom: 10px;
@@ -149,6 +173,11 @@ body {
     z-index: 21;
     
 }
+.hero button a{
+    color:aliceblue;
+    text-decoration: none;
+    border-radius: 10px;
+}
 
 .hero button:hover {
     background-color: #601700;
@@ -174,6 +203,13 @@ body {
     justify-content: space-around;
     flex-flow: nowrap;
     text-align: center;
+    text-overflow: hidden;
+}
+@media screen and (max-width:390px){
+    .cards{
+        height: 120px;
+        width: 50%;
+    }
 }
 
 .cardInside {
@@ -184,6 +220,7 @@ body {
     backdrop-filter: blur(10px);
     border-radius: 10px;
     /* transition: transform 0.3s ease, box-shadow 0.3s ease;  */
+   
 
    
 }
@@ -232,6 +269,7 @@ z-index: 11;
     font-size: 14px;
     padding: 5px;
     color: beige;
+    
 }
 
 
@@ -343,3 +381,4 @@ z-index: 11;
     padding: 20px;
     text-align: center;
 }
+
