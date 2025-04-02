@@ -1,4 +1,4 @@
-const socket = io("http://localhost:5000");
+const socket = io("https://medical-waste-management.onrender.com");
 
 socket.on("locationUpdate", (data) => {
   console.log("Live tracking update:", data);
@@ -15,9 +15,12 @@ async function checkAccess() {
   }
 
   try {
-    const response = await fetch("http://localhost:5000/api/auth", {
+    const response = await fetch("https://medical-waste-management.onrender.com/api/auth", {
       method: "GET",
-      headers: { Authorization: "Bearer " + token },
+      headers: { Authorization: "Bearer " + token,
+      "Content-Type": "application/json"
+       }
+  
     });
 
     if (response.status === 401 || response.status === 403) {

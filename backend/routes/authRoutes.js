@@ -2,8 +2,18 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
+
+
+router.get("/", authMiddleware, async (req, res) => {
+    try {
+        res.json({ message: "User authenticated", user: req.user });
+    } catch (error) {
+        res.status(500).json({ message: "Server Error" });
+    }
+});
 
 // Signup
 router.post("/signup", async (req, res) => {
