@@ -50,7 +50,9 @@ async function checkAccess() {
     window.location.href = "login.html"; // Redirect on failure
   }
 }
+document.addEventListener("DOMContentLoaded", checkAccess);
+
 
 // Run check when page loads
-window.onload = checkAccess();
+
 
