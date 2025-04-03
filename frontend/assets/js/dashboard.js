@@ -7,7 +7,7 @@
 
 async function checkAccess() {
   const token = localStorage.getItem("token");
-  console.log("Stored token:", token);  // Debug
+  console.log("Token from localStorage:", token);  // Debug
 
   if (!token) {
     alert("Unauthorized! Please log in.");
@@ -18,14 +18,16 @@ async function checkAccess() {
   try {
     const response = await fetch("https://medical-waste-management.onrender.com/api/auth", {
       method: "GET",
-      headers: { Authorization: "Bearer " + token,
+      headers: { Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin" : "*", 
       "Access-Control-Allow-Credentials" : true,
        },
       credentials: "include"
   
-    });
+    }).then(response => response.json())
+    .then(data => console.log("Response:", data))
+    .catch(error => console.error("Fetch Error:", error));
 
     if (response.status === 401 || response.status === 403) {
       alert("Access Denied!");
