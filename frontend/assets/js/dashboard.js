@@ -1,9 +1,9 @@
-const socket = io("https://medical-waste-management.onrender.com");
+// const socket = io("https://medical-waste-management.onrender.com");
 
-socket.on("locationUpdate", (data) => {
-  console.log("Live tracking update:", data);
-  updateMap(data.lat, data.lon);
-});
+// socket.on("locationUpdate", (data) => {
+//   console.log("Live tracking update:", data);
+//   updateMap(data.lat, data.lon);
+// });
 
 async function checkAccess() {
   const token = localStorage.getItem("token");
@@ -52,5 +52,5 @@ async function checkAccess() {
 }
 
 // Run check when page loads
-window.onload = checkAccess;
+window.onload = checkAccess();
 
