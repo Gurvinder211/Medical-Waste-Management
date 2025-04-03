@@ -7,6 +7,7 @@ socket.on("locationUpdate", (data) => {
 
 async function checkAccess() {
   const token = localStorage.getItem("token");
+  console.log("Stored token:", token);  // Debug
 
   if (!token) {
     alert("Unauthorized! Please log in.");
@@ -20,8 +21,9 @@ async function checkAccess() {
       headers: { Authorization: "Bearer " + token,
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin" : "*", 
-      "Access-Control-Allow-Credentials" : true 
-       }
+      "Access-Control-Allow-Credentials" : true,
+       },
+      credentials: "include"
   
     });
 

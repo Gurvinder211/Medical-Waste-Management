@@ -5,6 +5,8 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const authMiddleware = async (req, res, next) => {
+
+  console.log("Auth Header:", req.header("Authorization"));  
   const token = req.header("Authorization")?.split(" ")[1]; // Extract Bearer token
 
   if (!token) {

@@ -11,6 +11,8 @@ const trackingRoutes = require("./routes/trackingRoutes");
 const authMiddleware = require("./middleware/authMiddleware");
 
 
+
+
 // Initialize Express App
 const app = express();
 const server = http.createServer(app);
@@ -20,6 +22,7 @@ const wss = new Server({ server }); // WebSocket Server
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../frontend")));
+app.use(cors({ origin: "*", credentials: true }));
 
 //Routes
 app.use("/api/auth", authRoutes);
