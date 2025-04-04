@@ -19,7 +19,6 @@ const server = http.createServer(app);
 const wss = new Server({ server }); // WebSocket Server
 
 // Middleware
-app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../frontend")));
 app.use(cors({ origin: "*", credentials: true }));
@@ -53,7 +52,7 @@ app.get("/signup.html", (req, res) => {
   app.get("/contact.html", (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend", "pages", "contact.html"));
   });
-  app.get("/dashboard.html", authMiddleware, (req, res) => {
+  app.get("/dashboard.html", (req, res) => {
     console.log("User Role:", req.user.role); // Debugging log
   
     // Allow only specific roles
