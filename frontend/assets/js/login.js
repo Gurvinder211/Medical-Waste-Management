@@ -33,7 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (response.ok) {
         alert("Login successful!");
         // Save JWT token to localStorage and redirect to dashboard
-        localStorage.setItem("token", data.token);
+        sessionStorage.setItem("token", data.token); 
+        console.log("Token saved:", data.token);
         window.location.href = "dashboard.html";
       } else {
         alert(data.message || "Login failed!");

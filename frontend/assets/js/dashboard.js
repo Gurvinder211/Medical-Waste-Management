@@ -6,7 +6,7 @@
 // });
 
 async function checkAccess() {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   console.log("Token from localStorage:", token);  // Debug
 
   if (!token) {
@@ -52,7 +52,7 @@ async function checkAccess() {
     window.location.href = "login.html"; // Redirect on failure
   }
 }
-document.addEventListener("DOMContentLoaded", checkAccess);
+window.onload = checkAccess;
 
 
 // Run check when page loads
