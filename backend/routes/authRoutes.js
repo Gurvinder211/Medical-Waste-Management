@@ -36,8 +36,6 @@ router.post("/signup", async (req, res) => {
     }
 });
 
-module.exports = router;
-
 // Login
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
