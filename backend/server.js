@@ -53,7 +53,6 @@ app.get("/signup.html", (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend", "pages", "contact.html"));
   });
   app.get("/dashboard.html", (req, res) => {
-    console.log("User Role:", req.user.role); // Debugging log
   
     // Allow only specific roles
     if (req.user.role === "hospital" || req.user.role === "collector" || req.user.role === "admin") {
