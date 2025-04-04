@@ -1,27 +1,27 @@
 const express = require("express");
-const authMiddleware = require("../middleware/authMiddleware");
-const Waste = require("../models/Waste");
-
 const router = express.Router();
+const authMiddleware = require("../middleware/authMiddleware");
+const Waste = require("../models/Waste"); 
 
-// List Waste (Provider)
-router.post("/add", authMiddleware, async (req, res) => {
-    if (req.user.role !== "provider") return res.status(403).json({ message: "Access Denied" });
+// POST: Hospital places a new waste request
+router.post("/", authMiddleware, async (req, res) => {
+  try {
+    const { location, type, weight } = req.body;
 
-    const { type, weight, location } = req.body;
-    const waste = new Waste({ providerId: req.user.id, type, weight, location });
-    await waste.save();
+    const newWaste = new Waste({
+      hospital: req.user.id,
+      location,
+      type,
+      weight,
+      status: "Pending"
+    });
 
-    res.json({ message: "Waste Listed Successfully" });
+    await newWaste.save();
+    res.status(201).json({ message: "Waste reported successfully", waste: newWaste });
+  } catch (error) {
+    console.error("Error reporting waste:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 });
-
-// Get All Waste (Taker)
-router.get("/", authMiddleware, async (req, res) => {
-    if (req.user.role !== "taker") return res.status(403).json({ message: "Access Denied" });
-
-    const waste = await Waste.find({ status: "pending" });
-    res.json(waste);
-});
-  
 
 module.exports = router;

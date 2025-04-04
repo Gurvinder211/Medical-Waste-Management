@@ -38,6 +38,21 @@
       <section id="hospital" data-role="hospital">
         <h2>Hospital Dashboard</h2>
         <div class="card">
+          <h3>Report New Waste</h3>
+          <form id="wasteForm">
+            <label for="location">Location:</label>
+            <input type="text" id="location" required>
+      
+            <label for="type">Type of Waste:</label>
+            <input type="text" id="type" required>
+      
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" required>
+      
+            <button type="submit">Submit Waste</button>
+          </form>
+        </div>
+        <div class="card">
           <h3>Reported Waste</h3>
           <p>Status: <span id="wasteStatus">Pending</span></p>
           <p>Live Tracking: <span id="trackingStatus">Not Available</span></p>
@@ -68,6 +83,43 @@
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
     let truckMarker;
+    
+    // Script for wasteform
+
+    document.getElementById("wasteForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const token = localStorage.getItem("token");
+  const location = document.getElementById("location").value;
+  const type = document.getElementById("type").value;
+  const weight = document.getElementById("weight").value;
+
+  try {
+    const res = await fetch("https://medical-waste-management.onrender.com/api/waste", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
+      body: JSON.stringify({ location, type, weight })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert("Error placing request: " + data.message);
+      return;
+    }
+
+    alert("Waste request submitted successfully!");
+    document.getElementById("wasteForm").reset();
+    document.getElementById("wasteStatus").innerText = "Submitted";
+  } catch (error) {
+    console.error("Error submitting waste:", error);
+    alert("Something went wrong.");
+  }
+});
+
 
     // Setup the map
     const map = L.map('map').setView([40.7128, -74.0060], 12);
