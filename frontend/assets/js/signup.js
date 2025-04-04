@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
         address: document.getElementById("hospital-address").value,
         email: document.getElementById("hospital-email").value,
         password: document.getElementById("hospital-password").value,
-        role: "provider",
+        role: "hospital",
       };
     } else {
       userData = {
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
         licenseNumber: document.getElementById("license-number").value,
         email: document.getElementById("collector-email").value,
         password: document.getElementById("collector-password").value,
-        role: "taker",
+        role: "collector",
       };
     }
 
