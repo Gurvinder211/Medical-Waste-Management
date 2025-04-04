@@ -55,11 +55,11 @@ app.get("/signup.html", (req, res) => {
   app.get("/dashboard.html", (req, res) => {
   
     // Allow only specific roles
-    if (req.user.role === "hospital" || req.user.role === "collector" || req.user.role === "admin") {
+   // if (req.user.role === "hospital" || req.user.role === "collector" || req.user.role === "admin") {
       res.sendFile(path.join(__dirname, "../frontend/pages", "dashboard.html"));
-    } else {
-      return res.status(403).json({ message: "Access Denied" });
-    }
+   // } else {
+    //  return res.status(403).json({ message: "Access Denied" });
+   // }
   });
 
 // WebSocket Logic for Real-Time Truck Tracking
