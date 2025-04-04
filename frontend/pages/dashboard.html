@@ -4,51 +4,50 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="../assets/css/dashboard.css" />
-  <!-- Leaflet CSS for map integration -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <title>Dashboard</title>
-  <script href="../assets/js/dashboard.js"></script>
 </head>
 <body>
   <div class="dashboard">
+    <!-- Sidebar Navigation -->
     <div class="sidebar">
-      <!-- Sidebar Navigation -->
-      <a href="#collector">Collector Dashboard</a>
-      <a href="#hospital">Hospital Dashboard</a>
-      <a href="#admin">Admin Panel</a>
+      <a href="#collector" data-role="collector">Collector Dashboard</a>
+      <a href="#hospital" data-role="hospital">Hospital Dashboard</a>
+      <a href="#admin" data-role="admin">Admin Panel</a>
     </div>
+
+    <!-- Main Content -->
     <div class="main-content">
-      <!-- Collector Dashboard Section -->
-      <section id="collector">
+      
+      <!-- Collector Dashboard -->
+      <section id="collector" data-role="collector">
         <h2>Collector Dashboard</h2>
-        <div class="card" id="collectorCard">
+        <div class="card">
           <h3>Pending Waste Requests</h3>
-          <!-- Container for waste requests loaded dynamically -->
           <div id="wasteRequests"></div>
           <button onclick="acceptRequest()">Accept Request</button>
           <div class="status">
-            <button class="collected" onclick="updateStatus('Collected')">Collected</button>
-            <button class="transit" onclick="updateStatus('In Transit')">In Transit</button>
-            <button class="disposed" onclick="updateStatus('Disposed')">Disposed</button>
+            <button onclick="updateStatus('Collected')">Collected</button>
+            <button onclick="updateStatus('In Transit')">In Transit</button>
+            <button onclick="updateStatus('Disposed')">Disposed</button>
           </div>
         </div>
       </section>
 
-      <!-- Hospital Dashboard Section -->
-      <section id="hospital">
+      <!-- Hospital Dashboard -->
+      <section id="hospital" data-role="hospital">
         <h2>Hospital Dashboard</h2>
         <div class="card">
           <h3>Reported Waste</h3>
           <p>Status: <span id="wasteStatus">Pending</span></p>
           <p>Live Tracking: <span id="trackingStatus">Not Available</span></p>
           <p>Disposal Confirmation: Pending</p>
-          <!-- Map container for live tracking -->
           <div id="map" style="height: 300px;"></div>
         </div>
       </section>
 
-      <!-- Admin Panel Section -->
-      <section id="admin">
+      <!-- Admin Panel -->
+      <section id="admin" data-role="admin">
         <h2>Admin Panel</h2>
         <div class="card">
           <h3>Manage Users</h3>
@@ -61,115 +60,129 @@
           <p>Compliance Rate: <span id="complianceRate">0%</span></p>
         </div>
       </section>
+
     </div>
   </div>
 
-  <!-- Include Leaflet JS for map functionality -->
+  <!-- Scripts -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
-    /***** Map Setup using Leaflet *****/
-    // Initialize map centered on a default coordinate (e.g., New York City)
+    let truckMarker;
+
+    // Setup the map
     const map = L.map('map').setView([40.7128, -74.0060], 12);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
-    // Marker for the truck location (initially at default coordinates)
-    let truckMarker = L.marker([40.7128, -74.0060]).addTo(map)
-      .bindPopup("Truck Location");
 
-    // Update the marker on the map with new coordinates
+    truckMarker = L.marker([40.7128, -74.0060]).addTo(map).bindPopup("Truck Location");
+
     function updateMap(lat, lon) {
       truckMarker.setLatLng([lat, lon]);
       map.setView([lat, lon], 12);
     }
 
-    /***** Dashboard Functions *****/
-    // Simulate accepting a waste request (update status and trigger tracking)
     function acceptRequest() {
       alert('Request Accepted');
       document.getElementById('wasteStatus').innerText = 'Accepted';
-      // Start updating live tracking after accepting a request
       updateTrackingStatus();
     }
 
-    // Update the displayed waste status
     function updateStatus(status) {
       alert('Status updated to ' + status);
       document.getElementById('wasteStatus').innerText = status;
     }
 
-    // Fetch pending waste requests for the collector dashboard
     async function fetchWasteRequests() {
       try {
-        const response = await fetch("http://localhost:5000/api/waste", {
-          headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
+        const token = sessionStorage.getItem("token");
+        const response = await fetch("/api/waste", {
+          headers: { "Authorization": "Bearer " + token }
         });
         const data = await response.json();
-        const wasteRequestsDiv = document.getElementById("wasteRequests");
-        wasteRequestsDiv.innerHTML = ""; // Clear previous entries
-
-        data.forEach(request => {
+        const container = document.getElementById("wasteRequests");
+        container.innerHTML = "";
+        data.forEach(req => {
           const div = document.createElement("div");
-          div.classList.add("waste-request");
+          div.className = "waste-request";
           div.innerHTML = `
-            <p>Location: ${request.location}</p>
-            <p>Type: ${request.type}</p>
-            <p>Quantity: ${request.weight}kg</p>
+            <p>Location: ${req.location}</p>
+            <p>Type: ${req.type}</p>
+            <p>Quantity: ${req.weight}kg</p>
           `;
-          wasteRequestsDiv.appendChild(div);
+          container.appendChild(div);
         });
       } catch (error) {
         console.error("Error fetching waste requests:", error);
       }
     }
 
-    // Fetch live tracking data for the hospital dashboard
     async function fetchLiveTracking() {
       try {
-        // Replace '123456' with a dynamic waste/tracking ID as needed
-        const response = await fetch("http://localhost:5000/api/tracking/123456", {
-          headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
+        const token = sessionStorage.getItem("token");
+        const response = await fetch("/api/tracking/123456", {
+          headers: { "Authorization": "Bearer " + token }
         });
         const data = await response.json();
-        if (data && data.lat && data.lon) {
+        if (data?.lat && data?.lon) {
           document.getElementById("trackingStatus").innerText = data.status || "En Route";
           updateMap(data.lat, data.lon);
         }
       } catch (error) {
-        console.error("Error fetching live tracking data:", error);
+        console.error("Error fetching live tracking:", error);
       }
     }
 
-    // Start periodic fetching of live tracking data after a request is accepted
     function updateTrackingStatus() {
-      fetchLiveTracking(); // Initial fetch
-      setInterval(fetchLiveTracking, 5000); // Update every 5 seconds
+      fetchLiveTracking();
+      setInterval(fetchLiveTracking, 5000);
     }
 
-    // Fetch analytics data for the admin panel
     async function fetchAdminAnalytics() {
       try {
-        const response = await fetch("http://localhost:5000/api/admin/analytics", {
-          headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
+        const token = sessionStorage.getItem("token");
+        const response = await fetch("/api/admin/analytics", {
+          headers: { "Authorization": "Bearer " + token }
         });
         const data = await response.json();
         document.getElementById("totalHospitals").innerText = data.totalHospitals;
         document.getElementById("totalCollectors").innerText = data.totalCollectors;
-        document.getElementById("wasteCollected").innerText = data.wasteCollected + "kg";
-        document.getElementById("complianceRate").innerText = data.complianceRate + "%";
+        document.getElementById("wasteCollected").innerText = `${data.wasteCollected}kg`;
+        document.getElementById("complianceRate").innerText = `${data.complianceRate}%`;
       } catch (error) {
         console.error("Error fetching admin analytics:", error);
       }
     }
 
-    /***** On Page Load *****/
-    window.addEventListener("load", () => {
-      // Fetch dynamic data for each dashboard section
-      fetchWasteRequests();
-      fetchAdminAnalytics();
-      // Optionally, for hospitals, you might trigger live tracking automatically if a request is active:
-      // fetchLiveTracking();
-    });
+    async function setRoleBasedUI() {
+      try {
+        const token = sessionStorage.getItem("token");
+        const response = await fetch("/api/auth", {
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+        const data = await response.json();
+        const role = data.user.role;
+        console.log("Logged in as:", role);
+
+        // Hide all role-based sections not matching the current user
+        document.querySelectorAll("[data-role]").forEach(el => {
+          if (el.getAttribute("data-role") !== role) {
+            el.style.display = "none";
+          }
+        });
+
+        // Fetch respective data
+        if (role === "collector") fetchWasteRequests();
+        if (role === "hospital") fetchLiveTracking();
+        if (role === "admin") fetchAdminAnalytics();
+
+      } catch (error) {
+        console.error("Role-based UI error:", error);
+        window.location.href = "login.html";
+      }
+    }
+
+    window.addEventListener("load", setRoleBasedUI);
   </script>
 </body>
 </html>
