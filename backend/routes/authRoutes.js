@@ -26,7 +26,7 @@ router.post("/signup", async (req, res) => {
             email,
             password: hashedPassword,
             role,
-            ...(role === "collector" ? { address } : { companyName, licenseNumber }),
+            ...(role === "hospital" ? { address } : { companyName, licenseNumber }),
         });
 
         await newUser.save();
