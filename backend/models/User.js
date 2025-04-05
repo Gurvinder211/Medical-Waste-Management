@@ -4,7 +4,7 @@ const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, enum: ["provider", "collector"], required: true }, // Role-based Access
+  role: { type: String, enum: ["hospital", "collector"], required: true }, // Role-based Access
 
   // Fields specific to "providers" (Hospitals/Clinics)
   address: { type: String, required: function () { return this.role === "hospital"; } },

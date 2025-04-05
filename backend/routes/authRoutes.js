@@ -18,6 +18,7 @@ router.get("/", authMiddleware, async (req, res) => {
 // Signup
 router.post("/signup", async (req, res) => {
     const { name, email, password, role, address, companyName, licenseNumber } = req.body;
+    console.log("Signup Request Body:", req.body); 
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
