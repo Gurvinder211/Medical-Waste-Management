@@ -91,7 +91,7 @@
 
     document.getElementById("wasteForm")?.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       const type = document.getElementById("type").value;
       const weight = document.getElementById("weight").value;
       const lat = document.getElementById("lat").value;
