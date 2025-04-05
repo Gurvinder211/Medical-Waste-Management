@@ -128,7 +128,7 @@
 
     async function fetchAvailableWasteRequests() {
       try {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         const response = await fetch("api/waste/available", {
           headers: { "Authorization": "Bearer " + token }
         });
@@ -157,7 +157,7 @@
 
     async function fetchAdminAnalytics() {
       try {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         const response = await fetch("api/admin/analytics", {
           headers: { "Authorization": "Bearer " + token }
         });
@@ -173,7 +173,7 @@
 
     async function setRoleBasedUI() {
       try {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         const response = await fetch("api/auth", {
           headers: { "Authorization": `Bearer ${token}` }
         });
