@@ -1,11 +1,25 @@
 const mongoose = require("mongoose");
 
-const wasteSchema = new mongoose.Schema({
-  hospital: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  location: String,
+const WasteSchema = new mongoose.Schema({
   type: String,
   weight: Number,
-  status: { type: String, default: "Pending" }
-}, { timestamps: true });
+  location: {
+    lat: Number,
+    lon: Number
+  },
+  status: {
+    type: String,
+    default: "Pending"
+  },
+  assignedTo: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    default: null
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
 
-module.exports = mongoose.model("Waste", wasteSchema);
+module.exports = mongoose.model("Waste", WasteSchema);

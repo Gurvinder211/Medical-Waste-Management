@@ -24,4 +24,24 @@ router.post("/", authMiddleware, async (req, res) => {
   }
 });
 
+// GET /api/waste/available
+router.get("/available", authMiddleware, async (req, res) => {
+  try {
+    // Only allow collectors to access this
+    if (req.user.role !== "collector") {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    const pendingWaste = await Waste.find({
+      status: "Pending",
+      assignedTo: null
+    });
+
+    res.json(pendingWaste);
+  } catch (error) {
+    console.error("Error fetching available waste:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 module.exports = router;
