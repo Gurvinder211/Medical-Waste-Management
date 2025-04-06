@@ -43,8 +43,9 @@ A role-based fleet management web app for secure and compliant medical waste dis
 ### 🔍 AI Integrations (Planned)
 Using **Gemini API** and **Vertex AI**, we aim to introduce:
 
-- **Smart Waste Classification** (Image + Text analysis)
-- **Auto-suggest Safety Guidelines** for each waste type
-- **Chat-based AI Assistant** for Hospitals & Collectors
-- **Route Optimization** based on location & traffic
-- **Non-compliance Detection** using pattern recognition
+- 📈 **Monthly waste generation insights** for hospitals.
+- ♻️ **Compliance trend analysis** for collectors.
+- 🔍 Anomaly detection (e.g., sudden surge in waste types/volume).
+- 📅 Personalized optimization suggestions.
+
+These insights will help stakeholders improve sustainability and operational efficiency.
