@@ -6,7 +6,7 @@ A role-based fleet management web app for secure and compliant medical waste dis
 
 ### ⚠️ Note on MVP Load Time
 
-> ⏳ The **MVP may take 30–60 seconds to load** on first access because it's hosted on **Render's free tier**, which puts the server to sleep when inactive.
+> ⏳ The **MVP may take 20–50 seconds to load** on first access because it's hosted on **Render's free tier**, which puts the server to sleep when inactive.
 
 ## 🔧 Tech Stack
 
