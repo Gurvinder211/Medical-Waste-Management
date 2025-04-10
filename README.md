@@ -4,6 +4,10 @@
 
 A role-based fleet management web app for secure and compliant medical waste disposal...# 🧼 Medical Waste Management Platform
 
+### ⚠️ Note on MVP Load Time
+
+> ⏳ The **MVP may take 30–60 seconds to load** on first access because it's hosted on **Render's free tier**, which puts the server to sleep when inactive.
+
 ## 🔧 Tech Stack
 
 - **Frontend**: HTML, CSS, JavaScript (Vanilla)
